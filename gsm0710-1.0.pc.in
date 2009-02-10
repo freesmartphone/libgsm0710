@@ -1,0 +1,13 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+datarootdir=@datarootdir@
+datadir=@datadir@
+
+Name: libgsm0710
+Description: A GSM 07.10 Protocol Engine
+Version: @VERSION@
+Requires:
+Libs: -L${libdir} -lgsm0710
+Cflags: -I${includedir}/gsm0710-1.0
