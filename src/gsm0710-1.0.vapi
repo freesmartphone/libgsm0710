@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
 
-[CCode (cheader_filename = "gsm0710/gsm0710_p.h")]
+[CCode (cheader_filename = "gsm/gsm0710.h")]
 namespace Gsm0710
 {
     [CCode (cname = "GSM0710StatusType", cprefix="GSM0710_")]
