@@ -1,1 +1,8 @@
-An implementation of the 3GPP GSM 07.10 Multiplexing Protocol.
+A lightweight implementation of the 3GPP GSM 07.10 Multiplexing Protocol.
+
+If you want to have a full fledged GSM Multiplexer, you might want to
+use the fso-abyss project, which adds forwarding virtual channels
+through ptys and has a dbus controlling interface.
+
+Feel free to use this library to create other kinds of frontends.
+
