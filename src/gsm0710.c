@@ -250,7 +250,7 @@ static int gsm0710_packet( struct gsm0710_context *ctx, int channel, int type,
                            const char *data, int len )
 {
     char dbgmsg[1024];
-    snprintf( dbgmsg, sizeof dbgmsg, "0710 packet ok: chan %d, type 0x%02X, len %d\n", channel, type, len );
+    snprintf( dbgmsg, sizeof dbgmsg, "0710 packet ok: chan %d, type 0x%02X, len %d", channel, type, len );
     gsm0710_debug( ctx, dbgmsg );
     if (ctx->packet_filter &&
         (*(ctx->packet_filter))(ctx, channel, type, data, len)) {
@@ -328,7 +328,7 @@ static int gsm0710_packet( struct gsm0710_context *ctx, int channel, int type,
 #else
     } else if (type == (0x3F & 0xEF)) {
 #endif
-        printf( "D'OH!!! MODEM REQUESTED CHANNEL OPEN! WTF? HELP ME!\n" );
+        gsm0710_debug(ctx, "D'OH!!! MODEM REQUESTED CHANNEL OPEN! WTF? HELP ME!" );
         /* Incoming channel open request on server side */
         if (channel >= 1 && channel <= GSM0710_MAX_CHANNELS) {
             if (!is_channel_used(ctx, channel)) {
@@ -342,7 +342,7 @@ static int gsm0710_packet( struct gsm0710_context *ctx, int channel, int type,
 #else
     } else if (type == (0x53 & 0xEF)) {
 #endif
-        printf( "D'OH!!! MODEM REQUESTED CHANNEL CLOSE! WTF? HELP ME!\n" );
+        gsm0710_debug(ctx, "D'OH!!! MODEM REQUESTED CHANNEL CLOSE! WTF? HELP ME!" );
         /* Incoming channel close request on server side */
         if (channel >= 1 && channel <= GSM0710_MAX_CHANNELS) {
             if (is_channel_used(ctx, channel)) {
