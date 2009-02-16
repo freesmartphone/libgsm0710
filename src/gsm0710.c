@@ -255,13 +255,13 @@ int gsm0710_compute_crc( const char *data, int len )
 }
 
 /* Process an incoming GSM 07.10 packet */
-static int gsm0710_packet( struct gsm0710_context *ctx, int channel, int type,
-                           const char *data, int len )
+static int
+gsm0710_packet( struct gsm0710_context *ctx, int channel, int type, const char *data, int len )
 {
     char dbgmsg[1024];
 
-    snprintf( dbgmsg, sizeof dbgmsg, "0710 packet ok: chan %d, type 0x%02X, len %d", channel, type,
-              len );
+    snprintf( dbgmsg, sizeof dbgmsg, "0710 packet ok: chan %d, type 0x%02X, data[0] 0x%02X, len %d", channel, type,
+              data[0], len );
     gsm0710_debug( ctx, dbgmsg );
     if ( ctx->packet_filter && ( *( ctx->packet_filter ) ) ( ctx, channel, type, data, len ) )
     {
@@ -300,7 +300,7 @@ static int gsm0710_packet( struct gsm0710_context *ctx, int channel, int type,
                     ( *( ctx->terminate ) ) ( ctx );
                 return 0;
             }
-            else if ( len >= 2 && data[0] == ( char )0x43 )
+            else if ( len >= 2 && data[0] == ( char )( GSM0710_CMD_TEST | GSM0710_EA | GSM0710_CR ) )
             {
                 /* Test command from other side - send the same bytes back */
                 gsm0710_debug( ctx, "received test command, sending response" );
@@ -564,8 +564,8 @@ void gsm0710_ready_read( struct gsm0710_context *ctx )
 }
 
 /* Write a raw GSM 07.10 frame to the underlying device */
-void gsm0710_write_frame( struct gsm0710_context *ctx, int channel, int type,
-                          const char *data, int len )
+void
+gsm0710_write_frame( struct gsm0710_context *ctx, int channel, int type, const char *data, int len )
 {
     char *frame = ( char * )alloca( ctx->frame_size * 2 + 8 );
     int size;
