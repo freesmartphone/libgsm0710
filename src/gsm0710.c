@@ -24,17 +24,12 @@
 #include <string.h>
 #include <stdio.h>
 
-#undef DISTINGUISH_CLIENT_AND_SERVER
-
 /* Initialize a GSM 07.10 context, in preparation for startup */
 void gsm0710_initialize(struct gsm0710_context *ctx)
 {
     ctx->mode = GSM0710_MODE_BASIC;
     ctx->frame_size = GSM0710_DEFAULT_FRAME_SIZE;
     ctx->port_speed = 115200;
-#ifdef DISTINGUISH_CLIENT_AND_SERVER
-    ctx->server = 0;
-#endif
     ctx->buffer_used = 0;
     memset(ctx->used_channels, 0, sizeof(ctx->used_channels));
     ctx->reinit_detect = 0;
@@ -147,9 +142,6 @@ void gsm0710_shutdown(struct gsm0710_context *ctx)
 {
     static const char terminate[2] =
         {GSM0710_TERMINATE_BYTE1, GSM0710_TERMINATE_BYTE2};
-#ifdef DISTINGUISH_CLIENT_AND_SERVER
-    if (!ctx->server) {
-#endif
         int channel;
         for (channel = 1; channel <= GSM0710_MAX_CHANNELS; ++channel) {
             if(is_channel_used(ctx, channel)) {
@@ -157,9 +149,6 @@ void gsm0710_shutdown(struct gsm0710_context *ctx)
             }
         }
         gsm0710_write_frame(ctx, 0, GSM0710_DATA, terminate, 2);
-#ifdef DISTINGUISH_CLIENT_AND_SERVER
-    }
-#endif
     memset(ctx->used_channels, 0, sizeof(ctx->used_channels));
 }
 
@@ -171,10 +160,7 @@ int gsm0710_open_channel(struct gsm0710_context *ctx, int channel)
     if (is_channel_used(ctx, channel))
         return 1;       /* Channel is already open */
     mark_channel_used(ctx, channel);
-#ifdef DISTINGUISH_CLIENT_AND_SERVER
-    if (!ctx->server)
-#endif
-        gsm0710_write_frame(ctx, channel, GSM0710_OPEN_CHANNEL, 0, 0);
+    gsm0710_write_frame(ctx, channel, GSM0710_OPEN_CHANNEL, 0, 0);
     return 1;
 }
 
@@ -186,10 +172,7 @@ void gsm0710_close_channel(struct gsm0710_context *ctx, int channel)
     if (!is_channel_used(ctx, channel))
         return;         /* Channel is already closed */
     mark_channel_unused(ctx, channel);
-#ifdef DISTINGUISH_CLIENT_AND_SERVER
-    if (!ctx->server)
-#endif
-        gsm0710_write_frame(ctx, channel, GSM0710_CLOSE_CHANNEL, 0, 0);
+    gsm0710_write_frame(ctx, channel, GSM0710_CLOSE_CHANNEL, 0, 0);
 }
 
 /* Determine if a specific channel is open */
@@ -269,11 +252,7 @@ static int gsm0710_packet( struct gsm0710_context *ctx, int channel, int type,
             if (len >= 2 && data[0] == (char)GSM0710_STATUS_SET) {
                 return gsm0710_packet(ctx, channel, GSM0710_STATUS_ACK,
                                       data + 2, len - 2);
-#ifdef DISTINGUISH_CLIENT_AND_SERVER
-            } else if (len >= 2 && data[0] == (char)0xC3 && ctx->server) {
-#else
             } else if (len >= 2 && data[0] == (char)0xC3) {
-#endif
                 /* Incoming terminate request on server side */
                 for (channel = 1; channel <= GSM0710_MAX_CHANNELS; ++channel) {
                     if (is_channel_used(ctx, channel)) {
@@ -287,6 +266,7 @@ static int gsm0710_packet( struct gsm0710_context *ctx, int channel, int type,
                 return 0;
             } else if (len >= 2 && data[0] == (char)0x43) {
                 /* Test command from other side - send the same bytes back */
+                gsm0710_debug(ctx, "received test command, sending response");
                 char *resp = (char *)alloca(len);
                 memcpy(resp, data, len);
                 resp[0] = (char)0x41;   /* Clear the C/R bit in the response */
@@ -323,11 +303,7 @@ static int gsm0710_packet( struct gsm0710_context *ctx, int channel, int type,
         memcpy(resp + 2, data, len);
         gsm0710_write_frame(ctx, 0, GSM0710_DATA, resp, len + 2);
 
-#ifdef DISTINGUISH_CLIENT_AND_SERVER
-    } else if (type == (0x3F & 0xEF) && ctx->server) {
-#else
     } else if (type == (0x3F & 0xEF)) {
-#endif
         gsm0710_debug(ctx, "D'OH!!! MODEM REQUESTED CHANNEL OPEN! WTF? HELP ME!" );
         /* Incoming channel open request on server side */
         if (channel >= 1 && channel <= GSM0710_MAX_CHANNELS) {
@@ -337,11 +313,7 @@ static int gsm0710_packet( struct gsm0710_context *ctx, int channel, int type,
                     (*(ctx->open_channel))(ctx, channel);
             }
         }
-#ifdef DISTINGUISH_CLIENT_AND_SERVER
-    } else if (type == (0x53 & 0xEF) && ctx->server) {
-#else
     } else if (type == (0x53 & 0xEF)) {
-#endif
         gsm0710_debug(ctx, "D'OH!!! MODEM REQUESTED CHANNEL CLOSE! WTF? HELP ME!" );
         /* Incoming channel close request on server side */
         if (channel >= 1 && channel <= GSM0710_MAX_CHANNELS) {
@@ -373,11 +345,7 @@ void gsm0710_ready_read(struct gsm0710_context *ctx)
     ctx->buffer_used += len;
 
     /* Check for the re-initialization detection string */
-#ifdef DISTINGUISH_CLIENT_AND_SERVER
-    if (!ctx->server && ctx->reinit_detect_len &&
-#else
     if (ctx->reinit_detect_len &&
-#endif
         len >= ctx->reinit_detect_len &&
         !memcmp(ctx->buffer, ctx->reinit_detect, ctx->reinit_detect_len)) {
         gsm0710_startup(ctx, 1);
