@@ -51,7 +51,6 @@ namespace Gsm0710
         public int mode;
         public int frame_size;
         public int port_speed;
-        public int server;
         // not mapping char buffer[];
         // not mapping int buffer_used;
         // not mapping unsingedl long used_channels[];
