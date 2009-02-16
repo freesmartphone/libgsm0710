@@ -1,4 +1,9 @@
+2009-02-16	Michael Lauer	<mlauer@vanille-media.de>
+
+	* Fixed recognition of modem-originated test commands
+	* Released as version 1.1.0
+
 2009-02-10	Michael Lauer	<mlauer@vanille-media.de>
 
 	* Initial commit
-	* Release as version 1.0.0
+	* Released as version 1.0.0
