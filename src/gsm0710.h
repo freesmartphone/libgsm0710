@@ -56,17 +56,32 @@ extern "C" {
 #define GSM0710_DISCONNECT_MODE         0x0F
 #define GSM0710_DISCONNECT              0x43
 
-/* Status flags */
+/*
+ * Status flags for virtual channels. These map like that:
+ *
+ * Direction host application -> module:
+ *    RTC: mapped to DTR
+ *    RTR: mapped to RTS
+ *    Bits 5, 6, 7, 8 are not valid.
+ *
+ * Direction module -> host application:
+ *    RTC: mapped to DSR
+ *    RTR: mapped to CTS
+ *    RING: mapped to RING
+ *    DCD: mapped to DCD
+ *    Bits 5, 6 are not valid.
+ */
 #define GSM0710_FC                      0x02
-#define GSM0710_DTR                     0x04
-#define GSM0710_DSR                     0x04
-#define GSM0710_RTS                     0x08
-#define GSM0710_CTS                     0x08
+#define GSM0710_RTC                     0x04
+#define GSM0710_RTR                     0x08
 #define GSM0710_RING                    0x40
 #define GSM0710_DCD                     0x80
 
+
+/* Forward */
 struct gsm0710_context;
 
+/* Callbacks */
 typedef    int     (*gsm0710_context_at_command_callback)(struct gsm0710_context *ctx, const char *cmd);
 typedef    int     (*gsm0710_context_read_callback)(struct gsm0710_context *ctx, void *data, int len);
 typedef    int     (*gsm0710_context_write_callback)(struct gsm0710_context *ctx, const void *data, int len);

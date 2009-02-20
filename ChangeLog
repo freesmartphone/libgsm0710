@@ -1,3 +1,8 @@
+2009-02-20	Michael Lauer	<mlauer@vanille-media.de>
+
+	* Reorganized status flags for virtual channels (Non-Code-Change)
+	* Released as version 1.1.1
+
 2009-02-16	Michael Lauer	<mlauer@vanille-media.de>
 
 	* Fixed recognition of modem-originated test commands
