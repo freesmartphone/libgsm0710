@@ -28,4 +28,4 @@ dist_vapi_DATA = \
 	gsm0710-1.0.vapi \
 	$(NULL)
 
-EXTRA_DIST = gee-1.0.vapi
+EXTRA_DIST = gsm0710-1.0.vapi
