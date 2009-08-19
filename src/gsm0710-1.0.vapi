@@ -74,7 +74,7 @@ namespace Gsm0710
 
         /* Commands */
         [CCode (cname = "gsm0710_initialize")]
-        public void initialize();
+        public Context();
 
         [CCode (cname = "gsm0710_startup")]
         public bool startup( bool send_cmux );

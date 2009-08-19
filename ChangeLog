@@ -1,3 +1,8 @@
+2009-08-20	Michael Lauer	<mlauer@vanille-media.de>
+
+	* Add constructor instead of call to initialize (API change!)
+	* Released as version 1.1.2
+
 2009-02-20	Michael Lauer	<mlauer@vanille-media.de>
 
 	* Reorganized status flags for virtual channels (Non-Code-Change)
