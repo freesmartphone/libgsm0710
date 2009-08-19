@@ -43,7 +43,7 @@ namespace Gsm0710
     public static delegate bool packet_filter_t( Context ctx, int channel, int type, char* data, int len );
     public static delegate void response_to_test_t( Context ctx, char[] data ); /*char* data, int len );*/
 
-    [CCode (cname = "struct gsm0710_context", free_function = "")]
+    [CCode (cname = "struct gsm0710_context", free_function = "gsm0710_context_free")]
     [Compact]
     public class Context
     {
@@ -73,12 +73,8 @@ namespace Gsm0710
         public response_to_test_t response_to_test;
 
         /* Commands */
-        public Context()
-        {
-            initialize();
-        }
-        [CCode (cname = "gsm0710_initialize")]
-        private void initialize();
+        [CCode (cname = "gsm0710_context_new")]
+        public Context();
 
         [CCode (cname = "gsm0710_startup")]
         public bool startup( bool send_cmux );

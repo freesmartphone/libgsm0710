@@ -24,10 +24,13 @@
 #include <alloca.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
-/* Initialize a GSM 07.10 context, in preparation for startup */
-void gsm0710_initialize( struct gsm0710_context *ctx )
+/* Create a GSM 07.10 context and initialize in preparation for startup */
+struct gsm0710_context* gsm0710_context_new()
 {
+    struct gsm0710_context* ctx;
+    ctx = malloc( sizeof( struct gsm0710_context ) );
     ctx->mode = GSM0710_MODE_BASIC;
     ctx->frame_size = GSM0710_DEFAULT_FRAME_SIZE;
     ctx->port_speed = 115200;
@@ -48,6 +51,12 @@ void gsm0710_initialize( struct gsm0710_context *ctx )
     ctx->terminate = 0;
     ctx->packet_filter = 0;
     ctx->response_to_test = 0;
+}
+
+/* Free a context */
+void gsm0710_context_free( struct gsm0710_context *ctx )
+{
+    free( ctx );
 }
 
 /* Determine if a channel is in use */

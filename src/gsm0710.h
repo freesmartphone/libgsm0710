@@ -123,7 +123,7 @@ struct gsm0710_context
     gsm0710_context_response_to_test_callback response_to_test;
 };
 
-void gsm0710_initialize(struct gsm0710_context *ctx);
+struct gsm0710_context* gsm0710_context_new();
 void gsm0710_set_reinit_detect(struct gsm0710_context *ctx, const char *str);
 int gsm0710_startup(struct gsm0710_context *ctx, int send_cmux);
 void gsm0710_shutdown(struct gsm0710_context *ctx);
@@ -135,8 +135,8 @@ void gsm0710_write_frame(struct gsm0710_context *ctx, int channel, int type, con
 void gsm0710_write_data(struct gsm0710_context *ctx, int channel, const void *data, int len);
 void gsm0710_set_status(struct gsm0710_context *ctx, int channel, int status);
 int gsm0710_compute_crc(const char *data, int len);
-
 void gsm0710_send_test(struct gsm0710_context* ctx, const void* testdata, int len);
+void gsm0710_context_free(struct gsm0710_context* ctx);
 
 #ifdef __cplusplus
 };
