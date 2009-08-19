@@ -1,4 +1,4 @@
-AC_INIT([libgsm0710], [1.1.3], [mlauer@vanille-media.de], [libgsm0710])
+AC_INIT([libgsm0710], [1.1.4], [mlauer@vanille-media.de], [libgsm0710])
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([dist-bzip2])
