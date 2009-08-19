@@ -73,8 +73,12 @@ namespace Gsm0710
         public response_to_test_t response_to_test;
 
         /* Commands */
+        public Context()
+        {
+            initialize();
+        }
         [CCode (cname = "gsm0710_initialize")]
-        public Context();
+        private void initialize();
 
         [CCode (cname = "gsm0710_startup")]
         public bool startup( bool send_cmux );
