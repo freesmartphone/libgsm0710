@@ -51,6 +51,7 @@ struct gsm0710_context* gsm0710_context_new()
     ctx->terminate = 0;
     ctx->packet_filter = 0;
     ctx->response_to_test = 0;
+    return ctx;
 }
 
 /* Free a context */
