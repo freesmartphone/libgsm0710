@@ -1,7 +1,7 @@
 /*
- * gsm0710.vapi
+ * This file is part of libgsm0710
  *
- * Authored by Michael 'Mickey' Lauer <mlauer@vanille-media.de>
+ * (C) 2008-2010 Michael 'Mickey' Lauer <mlauer@vanille-media.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,18 +30,28 @@ namespace Gsm0710
     [CCode (cheader_filename = "errno.h")]
     public const int MAX_CHANNELS;
 
-    //[CCode (instance_pos = 0)] only for non-static delegates
-    public static delegate bool at_command_t( Context ctx, string command );
-    public static delegate int read_t( Context ctx, void* data, int len );
-    public static delegate bool write_t( Context ctx, void* data, int len );
-    public static delegate void deliver_data_t( Context ctx, int channel, void* data, int len );
-    public static delegate void deliver_status_t( Context ctx, int channel, int status );
-    public static delegate void debug_message_t( Context ctx, string msg );
-    public static delegate void open_channel_t( Context ctx, int channel );
-    public static delegate void close_channel_t( Context ctx, int channel );
-    public static delegate void terminate_t( Context ctx );
-    public static delegate bool packet_filter_t( Context ctx, int channel, int type, char* data, int len );
-    public static delegate void response_to_test_t( Context ctx, char[] data ); /*char* data, int len );*/
+    [CCode (has_target = false)]
+    public delegate bool at_command_t( Context ctx, string command );
+    [CCode (has_target = false)]
+    public delegate int read_t( Context ctx, void* data, int len );
+    [CCode (has_target = false)]
+    public delegate bool write_t( Context ctx, void* data, int len );
+    [CCode (has_target = false)]
+    public delegate void deliver_data_t( Context ctx, int channel, void* data, int len );
+    [CCode (has_target = false)]
+    public delegate void deliver_status_t( Context ctx, int channel, int status );
+    [CCode (has_target = false)]
+    public delegate void debug_message_t( Context ctx, string msg );
+    [CCode (has_target = false)]
+    public delegate void open_channel_t( Context ctx, int channel );
+    [CCode (has_target = false)]
+    public delegate void close_channel_t( Context ctx, int channel );
+    [CCode (has_target = false)]
+    public delegate void terminate_t( Context ctx );
+    [CCode (has_target = false)]
+    public delegate bool packet_filter_t( Context ctx, int channel, int type, char* data, int len );
+    [CCode (has_target = false)]
+    public delegate void response_to_test_t( Context ctx, char[] data ); /*char* data, int len );*/
 
     [CCode (cname = "struct gsm0710_context", free_function = "gsm0710_context_free")]
     [Compact]
